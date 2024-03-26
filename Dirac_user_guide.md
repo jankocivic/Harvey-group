@@ -37,6 +37,17 @@ A special script facilitates submitting Gaussian16 jobs directly from gaussian i
 For generating a formatted checkpoint file, type into the terminal:
 `/usr/local/chem/g16A03/formchk <GAUSSIAN_CHECKPOINT>`
 
+### Submitting a Python job
+
+In case you want to launch a python script and run it using your anaconda <ENV>, put these commands inside job submission file:
+```
+source /home/<YOUR_USERNAME>/.bashrc
+conda activate <ENV>
+python <YOUR_SCRIPT>.py
+```
+Bonus tip:
+In case your Python script uses packages that can use multiple threads (rdkit, numpy, sklearn etc.) you need to `export OMP_NUM_THREADS=<NUM_THREADS>` as you would do for any other code that uses multithreading.
+
 ### Other Software
 
 For software other than Gaussian16, use the `qsub` command with a custom `<JOB_SH>` file loading necessary software. Most software is located in `/usr/local/chem/`.
@@ -71,6 +82,7 @@ Sample `<JOB_SH>` files can be found in `/home/janko/Examples`, including:
 The GPU nodes have 2 GPUs each and in most cases only one is used in calculations. This means that at the same time it is possible to run two independent GPU calculations. By default Amber or Gromacs will use the first GPU listed with the `nvidia-smi` command. To use the second GPU it is required to add `export CUDA_VISIBLE_DEVICES=1` to your `<JOB_SH>` file.
 
 To terminate a running process, first identify its Process ID (PID) using the `ps -aux` command, then use the `kill <PID>` command to end it.
+In case this command doesn't kill the proces, try `kill -9 <PID>`. (This sends explicit SIGKILL signal that processes can't ignore).
 
 ## Ideas to include
 - How to run a memory demanding job
