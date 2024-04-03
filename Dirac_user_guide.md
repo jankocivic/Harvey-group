@@ -62,11 +62,13 @@ Sample `<JOB_SH>` files can be found in `/home/janko/Examples`, including:
 
 ## How to Submit a GPU Job
 
-Dirac's GPU nodes are private and don't have a scheduling system. For now, our group has 2 private GPU nodes with 2 GPUs each:
+Dirac's GPU nodes are private and don't have a scheduling system. For now, our group has 4 private GPU nodes with 2 GPUs each:
 - node115: 2 x NVIDIA GeForce GTX 1080 Ti
 - node120: 2 x NVIDIA Quadro RTX 6000
+- node33: 2 x NVIDIA L4
+- node34: 2 x NVIDIA L4
 
-To access them, first connect to dirac, then SSH directly into `node115` or `node120` by typing `ssh nodeXXX`. Contact Hans Vansweevelt if you lack permission. After successful connection, the terminal prompt should start with `user_name@nodeXXX`.
+To access them, first connect to dirac, then SSH directly into them by typing `ssh nodeXXX`. Contact Hans Vansweevelt if you lack permission. After successful connection, the terminal prompt should start with `user_name@nodeXXX`.
 
 Once connected, run jobs as you would on a personal computer; no `qsub` commands needed. Before running, check GPU usage with `nvidia-smi` or running processes with `ps -aux`.
 
