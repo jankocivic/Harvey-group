@@ -32,7 +32,7 @@ All nodes listed by `qsum` are CPU nodes. Unlike other clusters, Dirac requires 
 ### Submitting a Gaussian Job
 
 A special script facilitates submitting Gaussian16 jobs directly from gaussian input files. The script sets the CPU cores automatically. However, specify memory usage with `%mem=...` and checkpoint file location with `%chk=...`. To submit, type into the terminal:
-`subg16 <NODE> <GAUSSIAN_INPUT_FILE> /temp0/user_name`
+`subg16 <NODE> <GAUSSIAN_INPUT_FILE> /temp0/<USER_NAME>`
 
 For generating a formatted checkpoint file, type into the terminal:
 `/usr/local/chem/g16A03/formchk <GAUSSIAN_CHECKPOINT>`
@@ -40,7 +40,7 @@ For generating a formatted checkpoint file, type into the terminal:
 ### Submitting an Orca Job
 
 Similar to the subg16 script, I wrote a suborc5 script to facilitate the submission of Orca jobs directly from Orca input files. The script is located at `/home/janko/Scripts/suborc5`. Unlike the subg16 script, here you must specify the number of CPU cores manually in the input file with `%pal nprocs <NUM_CORES> end`. The memory should also be set manually in the input file with `%MaxCore <MEMORY>`. The input file should have an .inp extension. The geometry should be specified in the input file or read in from an xyz file, which should be located in the same folder as the Orca input file. Optionally, you can also provide a relative path to a gbw file from which you want to read in the initial guess. The script will copy the gbw file and change its name to match the base name of the input file. To submit, type the following into the terminal:
-`/home/janko/Scripts/suborc5 <NODE> <ORCA_INPUT_FILE> /temp0/user_name [<GBW_FILE>]`
+`/home/janko/Scripts/suborc5 <NODE> <ORCA_INPUT_FILE> /temp0/<USER_NAME> [<GBW_FILE>]`
 
 In the event of unexpected behavior, analyze the generated .job file. You are welcome to copy the suborc5 script and modify it according to your needs.
 
