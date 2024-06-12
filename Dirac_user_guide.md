@@ -93,6 +93,9 @@ The GPU nodes have 2 GPUs each and in most cases only one is used in calculation
 To terminate a running process, first identify its Process ID (PID) using the `ps -aux` command, then use the `kill <PID>` command to end it.
 In case this command doesn't kill the proces, try `kill -9 <PID>`. (This sends explicit SIGKILL signal that processes can't ignore).
 
+### Nodes 33 and 34
+If you want to submit an Amber22 GPU job on our GPU nodes 33 and 34, you need to submit the `<JOB_SH>` file with the following command `nohup /usr/local/chem/amber.sif ./<JOB_SH> &`. This does not apply to the GPU nodes 115 and 120.
+
 ## Ideas to include
 - How to run a memory demanding job
 - How to submit to the m and p queues
