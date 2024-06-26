@@ -20,7 +20,8 @@ Here's a quick overview of key commands:
 - `qstat`: Lists all running jobs (use `qstat -u $USER` to list only your jobs).
 - `qsub -q <NODE> <JOB_SH>`: Submits a job defined in `<JOB_SH>` to node `<NODE>`.
 - `qdel <JOB_ID>`: Terminates a job; the job ID is displayed in `qstat` output.
-- `qc`: Lists detailed information for all nodes (`qc -q` shows the corresponding queue name) 
+- `qc`: Lists detailed information for all nodes (`qc -q` shows the corresponding queue name)
+- `/home/janko/Scripts/free_nodes.py`: Lists all free and working nodes on Dirac
 
 _Bonus Tip:_ You can send a message to an user logged in on Dirac using the `write <USER_NAME>` command. An interactive prompt will appear, allowing you to type your message. After typing your message, press ENTER followed by Ctrl-C to send it.
 
