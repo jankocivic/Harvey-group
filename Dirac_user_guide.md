@@ -45,6 +45,12 @@ Similar to the subg16 script, I wrote a suborc5 script to facilitate the submiss
 
 In the event of unexpected behavior, analyze the generated .job file. You are welcome to copy the suborc5 script and modify it according to your needs.
 
+### Submitting a Turbomole job
+
+The `subtm7.8` script simplifies the submission of Turbomole 7.8 jobs directly from a Turbomole job folder, which differs from Gaussian and Orca as Turbomole jobs are defined by an entire input folder rather than a single input file. To prepare the jobs, use the `define` module, which is not computationally intensive and can be run directly from the Dirac login node. Start by loading the Turbomole environment with `source /usr/local/chem/turbomole7.7.1/Config_turbo_env` and then run `define` by typing `define` in the terminal. Detailed instructions for preparing input files are available in the Turbomole manual located at `/home/janko/Manuals`. Once the input files are ready, submit the job using the `subtm7.8` script with the command `/home/janko/Scripts/subtm7.8 --modules <module1> <module2> ... [--memory <memory>] [--cpus <cpus>] [--queue <queue>] [--name <name>]`. The only mandatory arguments are the Turbomole modules you want to run, such as `ridft` and `escf` or `dscf` and `ricc2`. Optional arguments allow you to specify memory, the number of CPUs, the queue, and the job name. If these options are not provided, the script defaults to submitting a job named `tm_job` to the `m0311` queue with 1 CPU and 4 GB of memory. The script automatically adjusts memory settings by modifying the `$maxcor` block in the control file and sets the scratch directory to `/temp0/$USER`, where a uniquely named folder is created and deleted after the job completes. 
+
+In case of unexpected behavior, you can analyze the generated `.job` file. The `subtm7.8` script can also be copied and modified to suit your specific needs.
+
 ### Submitting a Python job
 
 In case you want to launch a python script and run it using your anaconda <ENV>, put these commands inside job submission file:
