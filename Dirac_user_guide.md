@@ -2,7 +2,23 @@
 
 **Note:** This document is a work in progress and may contain errors. Please email any suggestions to janko.civic@kuleuven.be. While official documentation is available [here](https://qcpci.quantchem.kuleuven.be/), this guide complements it by providing more detail on the basics for inexperienced users.
 
-## What is Dirac?
+## Contents
+1. [What is Dirac](#what-is-dirac)
+2. [How to Connect](#how-to-connect)
+3. [Dirac Nodes](#dirac-nodes)
+4. [Storage on Dirac](#storage-on-dirac)
+5. [Important Commands](#important-commands)
+6. [How to Submit a Job](#how-to-submit-a-job)
+    - [Submitting an Orca Job](#submitting-an-orca-job)
+    - [Submitting a Gaussian Job](#submitting-a-gaussian-job)
+    - [Submitting a Turbomole Job](#submitting-a-turbomole-job)
+    - [Submitting an Amber Job](#submitting-an-amber-job)
+    - [Submitting an xTB Job](#submitting-an-xtb-job)
+    - [Submitting a Python Job](#submitting-a-python-job)
+    - [Other Software](#other-software)
+7. [Ideas to Include](#ideas-to-include)
+
+## What is Dirac
 
 Dirac serves as the computer cluster for the division of quantum chemistry and physical chemistry at KU Leuven. For any questions or issues, contact Hans Vansweevelt at hans.vansweevelt@kuleuven.be.
 
@@ -106,7 +122,7 @@ Submission script Amber24:
 #!/bin/bash
 export LD_LIBRARY_PATH=/usr/local/OpenBLAS/lib:/usr/local/chem/xtb-6.7.1/lib:$LD_LIBRARY_PATH
 source /usr/local/chem/amber24/amber.sh
-cd <AMBER_DIR>
+cd <INP_DIR>
 
 sander ...
 ```
@@ -115,7 +131,7 @@ Submission script Amber22:
 ```
 #!/bin/bash
 source /usr/local/chem/amber22/amber.sh
-cd <AMBER_DIR>
+cd <INP_DIR>
 
 sander ...
 ```
@@ -139,7 +155,7 @@ export LD_LIBRARY_PATH=/usr/local/OpenBLAS/lib:/usr/local/chem/xtb-6.7.1/lib:$LD
 source /usr/local/chem/amber24/amber.sh
 source /home/janko/Scripts/set_environment_xtb.sh
 
-cd <AMBER_DIR>
+cd <INP_DIR>
 
 sander ...
 ```
@@ -158,10 +174,26 @@ export RSH_COMMAND=/usr/bin/ssh
 export OMP_NUM_THREADS=16
 export LD_LIBRARY_PATH=$MPI/lib:$ORCA/lib:$LD_LIBRARY_PATH
 
-cd <AMBER_DIR>
+cd <INP_DIR>
 
 sander ...
 ```
+
+### Submitting an xTB Job
+Like Turbomole, xTB uses entire input directories instead of conventional input files. Once all the necessary files are in the input directory, submit a job script using `qsub` to the g-queues or the m0311, m1219, and m2022 queues.
+
+Submission script:
+```
+#!/bin/bash
+ulimit -s unlimited
+export LD_LIBRARY_PATH=/usr/local/OpenBLAS/lib:/usr/local/chem/xtb-6.7.1/lib:$LD_LIBRARY_PATH
+source /home/janko/Scripts/set_environment_xtb.sh
+
+cd <INP_DIR>
+
+xtb ...
+```
+
 
 ### Submitting a Python Job
 
@@ -185,6 +217,6 @@ If your script uses multithreaded packages (e.g., `rdkit`, `numpy`, `sklearn`), 
 
 For other software you will need to write your own `<JOB_SH>` submission script. A list of available software can be seen [here](https://qcpci.quantchem.kuleuven.be/software/). On a node, the available software is usually located in the `/usr/local/chem/` directory.
 
-## Ideas to include
+## Ideas to Include
 - How to write a good job script (making use of the scrtach directory)
 - How to install software
