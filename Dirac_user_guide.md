@@ -69,22 +69,24 @@ Be aware that there are limits on the number of jobs a user can submit and the m
 
 Running a job with specific software can be challenging, so the following sections provide detailed instructions for some of the commonly used software.
 
-### Submitting a Gaussian Job
-
-A special script facilitates submitting Gaussian16 jobs directly from gaussian input files. The script sets the CPU cores automatically. However, specify memory usage with `%mem=...` and checkpoint file location with `%chk=...`. To submit, type into the terminal:
-`subg16 <NODE> <GAUSSIAN_INPUT_FILE> /temp0/<USER_NAME>`
-
-For generating a formatted checkpoint file, type into the terminal:
-`/usr/local/chem/g16A03/formchk <GAUSSIAN_CHECKPOINT>`
-
 ### Submitting an Orca Job
 
-Similar to the subg16 script, I wrote a suborc5 script to facilitate the submission of Orca jobs directly from Orca input files. The script is located at `/home/janko/Scripts/suborc5`. Unlike the subg16 script, here you must specify the number of CPU cores manually in the input file with `%pal nprocs <NUM_CORES> end`. The memory should also be set manually in the input file with `%MaxCore <MEMORY>`. The input file should have an .inp extension. The geometry should be specified in the input file or read in from an xyz file, which should be located in the same folder as the Orca input file. Optionally, you can also provide a relative path to a gbw file from which you want to read in the initial guess. The script will copy the gbw file and change its name to match the base name of the input file. To submit, type the following into the terminal:
-`/home/janko/Scripts/suborc5 <NODE> <ORCA_INPUT_FILE> /temp0/<USER_NAME> [<GBW_FILE>]`
+To simplify the submission of Orca jobs, the process of writing job scripts and submitting them can be automated using the `suborc6` script, which allows you to submit Orca jobs directly from input files without the need for separate job scripts. To submit a job, use the command: `/home/janko/Scripts/suborc6 --input <input_file> [--memory <memory>] [--cpus <cpus>] [--queue <queue>] [--name <name>] [--gbw <gbw_file>]`. The only mandatory argument is the input file, which must have an `.inp` extension. Optional arguments allow you to customize memory allocation, CPU count, queue, and job name. If not provided, the script defaults to submitting a job named `orc_job` to the `m0311` queue, using 1 CPU and 4 GB of memory. You can also provide a relative path to a gbw file used for the initial guess. The script automatically adjusts cores and memory by adding `%pal` and `%maxcore` blocks to the input file and sets the scratch directory to `/temp0/$USER`, where a uniquely named folder is created and deleted after job completion. During job execution, you can monitor the ORCA output file (with the `.out` extension) in the submission directory. Any standard output or error messages are logged in a file with the `-batch.out` extension, also located in the submission directory. The new gbw file is saved in the submission directory and has the same base name as the input file (the `.inp` extension is replaced with `.gbw`).
 
-In the event of unexpected behavior, analyze the generated .job file. You are welcome to copy the suborc5 script and modify it according to your needs.
+In case of unexpected behaviour, the generated `.job` file can be analysed, and the suborc6 script can be copied and modified to meet specific requirements.
 
-### Submitting a Turbomole job
+### Submitting a Gaussian Job
+
+To simplify the submission of Gaussian16 jobs, the process of writing job scripts and submitting them can be automated using the `subgau16` script, which allows you to submit Gaussian jobs directly from a Gaussian input file without the need for separate job scripts. To submit a job, use the command: `/home/janko/Scripts/subgau16 --input <input_file> [--memory <memory>] [--cpus <cpus>] [--queue <queue>] [--name <name>] [--chk <chk_file>]`. The only mandatory argument is the input file, which must have an `.inp` extension. Optional arguments allow you to customize memory allocation, CPU count, queue, and job name. If not provided, the script defaults to submitting a job named `gau_job` to the `m0311` queue, using 1 CPU and 10 GB of memory. You can also provide a relative path to a chk file used for the initial guess. The script automatically adjusts cores and memory by adding `%Mem` and `%NProcShared` lines to the input file and sets the scratch directory to `/temp0/$USER`, where a uniquely named folder is created and deleted after job completion. During job execution, you can monitor the Gaussian output file (with the `.log` extension) in the submission directory. Any standard output or error messages are logged in a file with the `-batch.out` extension, also located in the submission directory. The new checkpoint file is saved in the submission directory and has the same base name as the input file (the `.inp` extension is replaced with `.chk`).
+
+In case of unexpected behaviour, the generated `.job` file can be analysed, and the suborc6 script can be copied and modified to meet specific requirements.
+
+If you encounter a "galloc: could not allocate memory" error in your calculation, try rising the specified memory. See an explanation of why the error occurs [here](https://docs.alliancecan.ca/wiki/Gaussian_error_messages#galloc:_could_not_allocate_memory). 
+
+For generating a formatted checkpoint file, from the login node use the command:
+`/usr/local/chem/g16A03/formchk <GAUSSIAN_CHECKPOINT>`
+
+### Submitting a Turbomole Job
 
 The `subtm7.8` script simplifies the submission of Turbomole 7.8 jobs directly from a Turbomole job folder, which differs from Gaussian and Orca as Turbomole jobs are defined by an entire input folder rather than a single input file. To prepare the jobs, use the `define` module, which is not computationally intensive and can be run directly from the Dirac login node. Start by loading the Turbomole environment with `source /usr/local/chem/turbomole7.7.1/Config_turbo_env` and then run `define` by typing `define` in the terminal. Detailed instructions for preparing input files are available in the Turbomole manual located at `/home/janko/Manuals`. Once the input files are ready, submit the job using the `subtm7.8` script with the command `/home/janko/Scripts/subtm7.8 --modules <module1> <module2> ... [--memory <memory>] [--cpus <cpus>] [--queue <queue>] [--name <name>]`. The only mandatory arguments are the Turbomole modules you want to run, such as `ridft` and `escf` or `dscf` and `ricc2`. Optional arguments allow you to specify memory, the number of CPUs, the queue, and the job name. If these options are not provided, the script defaults to submitting a job named `tm_job` to the `m0311` queue with 1 CPU and 4 GB of memory. The script automatically adjusts memory settings by modifying the `$maxcor` block in the control file and sets the scratch directory to `/temp0/$USER`, where a uniquely named folder is created and deleted after the job completes. 
 
@@ -92,28 +94,96 @@ In case of unexpected behavior, you can analyze the generated `.job` file. The `
 
 ### Submitting an Amber Job
 
-### Submitting a Python job
+Amber22 is available on all the nodes, while Amber24 is available on all the nodes besides the GPU nodes corresponding to the d-queues, but this is expected to change in the near future.
 
-In case you want to launch a python script and run it using your anaconda <ENV>, put these commands inside job submission file:
+To submit an Amber job to one of the computation nodes you will need to write a job script which loads in Amber and potentially other necessary external software, navigates to the submission directory and contains the command to start an amber calculation. All necessary input files should be in the submission directory. Submit the script with the `qsub` command. In the following sections example job scripts will be shown for different types of calculations.
+
+#### CPU Job
+If you perform a calculation with Amber which only uses the CPU use `sander` as the MD driver and submit to the  g-queues or m0311, m1219, and m2022. 
+
+Submission script Amber24:
 ```
-source /home/<YOUR_USERNAME>/.bashrc
-conda activate <ENV>
+#!/bin/bash
+export LD_LIBRARY_PATH=/usr/local/OpenBLAS/lib:/usr/local/chem/xtb-6.7.1/lib:$LD_LIBRARY_PATH
+source /usr/local/chem/amber24/amber.sh
+cd <AMBER_DIR>
+
+sander ...
+```
+
+Submission script Amber22:
+```
+#!/bin/bash
+source /usr/local/chem/amber22/amber.sh
+cd <AMBER_DIR>
+
+sander ...
+```
+
+#### GPU Job
+Dirac has four GPU nodes (their corresponding queues begin with d). It is important that you submit the submission script to one of the d-queues and use `pmemd.cuda` as the MD driver. Since each node in the d-queues contains two GPUs you can run two parallel jobs, each on one GPU by setting the `CUDA_VISIBLE_DEVICES` environment variable. `export CUDA_VISIBLE_DEVICES=0` to use the first GPU and `export CUDA_VISIBLE_DEVICES=1` for the second GPU.
+
+Submission script Amber22:
+```
+TO DO
+```
+
+#### Amber + xTB
+QM/MM simulations with xTB are not able to use the GPU. Use `sander` as the MD driver and submit to the  g-queues or m0311, m1219, and m2022.
+
+Submission script Amber24:
+```
+#!/bin/bash
+ulimit -s unlimited
+export LD_LIBRARY_PATH=/usr/local/OpenBLAS/lib:/usr/local/chem/xtb-6.7.1/lib:$LD_LIBRARY_PATH
+source /usr/local/chem/amber24/amber.sh
+source /home/janko/Scripts/set_environment_xtb.sh
+
+cd <AMBER_DIR>
+
+sander ...
+```
+#### Amber + Orca
+QM/MM simulations with Orca are not able to use the GPU. Use `sander` as the MD driver and submit to the  g-queues or m0311, m1219, and m2022.
+
+Submission script Amber24:
+```
+#!/bin/bash
+export LD_LIBRARY_PATH=/usr/local/OpenBLAS/lib:/usr/local/chem/xtb-6.7.1/lib:$LD_LIBRARY_PATH
+source /usr/local/chem/amber24/amber.sh
+ORCA=/usr/local/chem/orca6
+MPI=/usr/local/openmpi-4.1.1-gcc-10.3.0
+export PATH=$ORCA/bin:$MPI/bin:$PATH
+export RSH_COMMAND=/usr/bin/ssh
+export OMP_NUM_THREADS=16
+export LD_LIBRARY_PATH=$MPI/lib:$ORCA/lib:$LD_LIBRARY_PATH
+
+cd <AMBER_DIR>
+
+sander ...
+```
+
+### Submitting a Python Job
+
+To run Python scripts, it's recommended to use an Anaconda environment. One the login node, create one with `conda create --name <ENV_NAME>`, activate it using `conda activate <ENV_NAME>`, and install packages via `conda install <PACKAGE_NAME>`. The environments are stored in the hidden `.conda` folder in your home directory.
+
+To execute a Python script `<YOUR_SCRIPT>.py` located in `<SUBDIR_PATH>` on a computation node, your job submission script should look like this:
+
+```
+#!/bin/bash
+python3path=/home/<USER_NAME>/.conda/envs/<ENV_NAME>/bin
+export PATH=$python3path:$PATH
+
+cd <SUBDIR_PATH>
+
 python <YOUR_SCRIPT>.py
 ```
-Bonus tip:
-In case your Python script uses packages that can use multiple threads (rdkit, numpy, sklearn etc.) you need to `export OMP_NUM_THREADS=<NUM_THREADS>` as you would do for any other code that uses multithreading.
+
+If your script uses multithreaded packages (e.g., `rdkit`, `numpy`, `sklearn`), add `export OMP_NUM_THREADS=<NUM_THREADS>` to the job submission script. Submit the script to a queue with `qsub`. 
 
 ### Other Software
 
-For software other than Gaussian16, use the `qsub` command with a custom `<JOB_SH>` file loading necessary software. Most software is located in `/usr/local/chem/`.
-To submit type into the terminal:
-`qsub -q <NODE> <JOB_SH>`
-
-Sample `<JOB_SH>` files can be found in `/home/janko/Examples`, including:
-- `Amber_xTB.sh`: Example for QM/MM calculation with Amber and xTB.
-- `Amber_CPU.sh`: Example for an Amber CPU job.
-- `xTB.sh`: Example for an xTB calculation.
-- `orca.sh`: Example for an Orca calculation
+For other software you will need to write your own `<JOB_SH>` submission script. A list of available software can be seen [here](https://qcpci.quantchem.kuleuven.be/software/). On a node, the available software is usually located in the `/usr/local/chem/` directory.
 
 ## Ideas to include
 - How to write a good job script (making use of the scrtach directory)
