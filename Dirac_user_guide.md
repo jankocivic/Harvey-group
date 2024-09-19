@@ -1,6 +1,7 @@
 # Dirac User Guide
 
-**Note:** This document is a work in progress and may contain errors. Please email any suggestions to janko.civic@kuleuven.be. While official documentation is available [here](https://qcpci.quantchem.kuleuven.be/), this guide complements it by providing more detail on the basics for inexperienced users.
+> [!NOTE]
+> This document is a work in progress and may contain errors. Please email any suggestions to janko.civic@kuleuven.be. While official documentation is available [here](https://qcpci.quantchem.kuleuven.be/), this guide complements it by providing more detail on the basics for inexperienced users.
 
 ## Contents
 1. [What is Dirac](#what-is-dirac)
@@ -41,7 +42,8 @@ For demanding tasks, users should utilize dedicated computation nodes by submitt
 
 The status of m-queues and the occupancy of each node in the group can be checked using the `qm` command. Users should still select m-queues based on job requirements: m0311, m1219, and m2022 for general-purpose jobs (same as g-queues), and m131138 and m139146 for memory and disk space-intensive jobs (same as p-queues).
 
-To maintain system efficiency and fairness, users should try to responsibly select the appropriate queue for their intended job and minimize computational resource usage. This approach ensures optimal performance for all users of Dirac.
+> [!IMPORTANT]
+> To maintain system efficiency and fairness, users should try to responsibly select the appropriate queue for their intended job and minimize computational resource usage. This approach ensures optimal performance for all users of Dirac.
 
 ## Storage on Dirac
 
@@ -52,9 +54,8 @@ There are two types of data storage to be aware of:
 2. **Temporary Storage** (`/temp0/<USER_NAME>/`):  
     Many software programs generate large temporary files that can exceed the limits of your home folder. To address this, each computing node has a temporary folder located at `/temp0/<USER_NAME>/`.  This folder is not directly accessible from the login node, but can be accessed by job scripts submitted to a node. Files stored on it are not backed up and are automatically deleted after a period of time. You can check the storage limit for this folder on each node using the `qc` command. When submitting a job via a script, it's recommended that the script copies all input files to `/temp0/<USER_NAME>/`, performs the calculations there, and at the end, only transfers the necessary output files back to your home folder. This minimizes the load on your home storage.
 
-**Note for Molecular Dynamics Users:**
-
-If you are running classical molecular dynamics simulations, be cautious with storage, as trajectory files can quickly exceed your home folder limits. To manage this, consider reducing the frequency of snapshot writing to the trajectory file or stripping unnecessary atoms, such as solvent atoms, from the system.
+> [!WARNING]
+> If you are running classical molecular dynamics simulations, be cautious with storage, as trajectory files can quickly exceed your home folder limits. To manage this, consider reducing the frequency of snapshot writing to the trajectory file or stripping unnecessary atoms, such as solvent atoms, from the system.
 
 ## Important Commands
 
@@ -69,7 +70,8 @@ Here's a quick overview of key commands:
 - `qstat`: Lists all running jobs (use `qstat -u $USER` to list only your jobs).
 - `qdel <JOB_ID>`: Terminates a job; the job ID is displayed in `qstat` output.
 
-_Bonus Tip:_ You can send a message to an user logged in on Dirac using the `write <USER_NAME>` command. An interactive prompt will appear, allowing you to type your message. After typing your message, press ENTER followed by Ctrl-C to send it.
+> [!TIP]
+> You can send a message to an user logged in on Dirac using the `write <USER_NAME>` command. An interactive prompt will appear, allowing you to type your message. After typing your message, press ENTER followed by Ctrl-C to send it.
 
 ## How to Submit a Job
 
