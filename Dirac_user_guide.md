@@ -37,13 +37,13 @@ For demanding tasks, users should utilize dedicated computation nodes by submitt
 
 - **g-queues:** General-purpose queues where each queue corresponds to one node (e.g., g10 corresponds to node10) for jobs with moderate resource requirements.
 - **p-queues:** High-performance queues where each queue corresponds to one node (e.g., p27 corresponds to node27) for jobs needing substantial memory or disk space.
-- **d-queues:** GPU-enabled queues where each queue corresponds to one node (e.g., d33 corresponds to node33) for tasks requiring GPU resources, such as classical molecular dynamics simulations or machine learning model training. **They should not be used for tasks not requiring a GPU.**
+- **d-queues:** GPU-enabled queues where each queue corresponds to one node (e.g., d33 corresponds to node33) for tasks requiring GPU resources, such as classical molecular dynamics simulations or machine learning model training.
 - **m-queues:** Very different from g-, p- and d-queues. They are groups of several nodes (e.g., m0311 includes node03 to node11). Jobs submitted to these queues run on the first available node in the group. This setup offers convenience by eliminating the need to check individual node availability. Additionally, requesting a single CPU core in an m-queue will occupy only that core on a specific node, leaving other cores available for different jobs.
 
 The status of m-queues and the occupancy of each node in the group can be checked using the `qm` command. Users should still select m-queues based on job requirements: m0311, m1219, and m2022 for general-purpose jobs (same as g-queues), and m131138 and m139146 for memory and disk space-intensive jobs (same as p-queues).
 
 > [!IMPORTANT]
-> To maintain system efficiency and fairness, users should try to responsibly select the appropriate queue for their intended job and minimize computational resource usage. This approach ensures optimal performance for all users of Dirac.
+> To maintain system efficiency and fairness, users should select the appropriate queue based on the specific requirements of their job and minimize unnecessary resource usage. Avoid using d-queues for tasks that don't require a GPU and p-queues (including m139146 and m131138) for jobs that aren't memory or disk space intensive. This ensures optimal performance and fair resource distribution for all Dirac users.
 
 ## Storage on Dirac
 
