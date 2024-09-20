@@ -79,7 +79,7 @@ When working on a personal computer, tasks are executed directly in the terminal
 
 To submit a job using `qsub`, the basic syntax is `qsub -q <QUEUE> <JOB_SH>`, where `<JOB_SH>` is your job script, and `<QUEUE>` specifies the queue. However, this basic command doesn’t allow you to control the number of CPU cores or the amount of memory allocated to your job. By default, the number of cores assigned to each queue can be viewed using the `qc -q` command under the "Default ppn" (processors per node) column.
 
-For more control over resource allocation, you can use the following: `qsub -q <QUEUE> -l nodes=1:<QUEUE>:ppn=<NUM_CPUS>,mem=<MEMORY>gb <JOB_SH>`. This submits your job with the requested number of CPU cores and memory in GB. This approach is recommended as it allows you to request only the resources you need, ensuring that unused resources are available for other users. Available resources for each node can be seen in the output of the `qc` command.
+For more control over resource allocation, you can use the following: `qsub -q <QUEUE> -l nodes=1:<QUEUE>:ppn=<NUM_CPUS>,mem=<MEMORY>gb <JOB_SH>` to submit to the m-queues. This submits your job with the requested number of CPU cores and memory in GB. This approach is recommended as it allows you to request only the resources you need, ensuring that unused resources are available for other users. Available resources for each node can be seen in the output of the `qc` command.
 
 Additional useful options to `qsub` include `-N <NAME>`, which assigns a name to your job, and `-e <OUTPUT_FILE> -j eo`, which redirects both the standard error and output to a file named `<OUTPUT_FILE>` in the submission directory.
 
