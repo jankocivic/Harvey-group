@@ -15,6 +15,7 @@
     - [Submitting a Turbomole Job](#submitting-a-turbomole-job)
     - [Submitting an Amber Job](#submitting-an-amber-job)
     - [Submitting an xTB Job](#submitting-an-xtb-job)
+    - [Submitting an AlphaFold Job](#submitting-an-alphafold-job)
     - [Submitting a Python Job](#submitting-a-python-job)
     - [Other Software](#other-software)
 7. [Ideas to Include](#ideas-to-include)
@@ -196,6 +197,16 @@ cd <INP_DIR>
 xtb ...
 ```
 
+### Submitting an AlphaFold Job
+To predict the structure of a protein sequence on Dirac using [LocalColabFold](https://github.com/YoshitakaMo/localcolabfold), which is based on AlphaFold2, you need a sequence file in `.fasta` format (`<INP_FILE>.fasta`).  Submit the job with `qsub` to queues d33 or d34. The output will be stored in the folder `<OUTPUT_DIR>`.
+
+Submission script:
+```
+#!/bin/bash
+cd <INP_DIR>
+source /home/janko/Software/colabfold/vars
+colabfold_batch <INP_FILE>.fasta <OUTPUT_DIR>
+```
 
 ### Submitting a Python Job
 
