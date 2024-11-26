@@ -15,7 +15,8 @@
     - [Submitting a Turbomole Job](#submitting-a-turbomole-job)
     - [Submitting an Amber Job](#submitting-an-amber-job)
     - [Submitting an xTB Job](#submitting-an-xtb-job)
-    - [Submitting an AlphaFold Job](#submitting-an-alphafold-job)
+    - [Submitting a LocalColabFold Job](#submitting-a-localcolabfold-job)
+    - [Submitting a Boltz-1 Job](#submitting-a-boltz-1-job)
     - [Submitting a Python Job](#submitting-a-python-job)
     - [Other Software](#other-software)
 7. [Ideas to Include](#ideas-to-include)
@@ -197,8 +198,8 @@ cd <INP_DIR>
 xtb ...
 ```
 
-### Submitting an AlphaFold Job
-To predict the structure of a protein sequence on Dirac using [LocalColabFold](https://github.com/YoshitakaMo/localcolabfold), which is based on AlphaFold2, you need a sequence file in `.fasta` format (`<INP_FILE>.fasta`).  Submit the job with `qsub` to queues d33 or d34. The output will be stored in the folder `<OUTPUT_DIR>`.
+### Submitting a LocalColabFold Job
+To predict the structure of a protein sequence on Dirac using [LocalColabFold](https://github.com/YoshitakaMo/localcolabfold), which is based on AlphaFold2, you need a sequence file in `.fasta` format (`<INP_FILE>.fasta`).  Submit the job script with `qsub` to queues d33 or d34. The output will be stored in the folder `<OUTPUT_DIR>`.
 
 Submission script:
 ```
@@ -206,6 +207,28 @@ Submission script:
 cd <INP_DIR>
 source /home/janko/Software/colabfold/vars
 colabfold_batch <INP_FILE>.fasta <OUTPUT_DIR>
+```
+
+### Submitting a Boltz-1 Job
+To predict the structure of a protein sequence with ligands on Dirac using [Boltz-1](https://github.com/jwohlwend/boltz), which is a model similar to AlphaFold3, you need a sequence file in `.fasta` or `.yml` format. More details on the structure of the input files can be found in the [documentation](https://github.com/jwohlwend/boltz/blob/main/docs/prediction.md). Submit the job script with `qsub` to queues d33 or d34. Boltz-1 downloads model parameters dynamically. In the submission script, specify a directory (`<PARAMETER_DIR>`) to store them. The parameters require approximately 7 GB of storage. The maximum size of the system you can model is limited by the GPU memory. 
+
+Example input `.fasta` file:
+```
+>A|protein
+MVTPEGNVSLVDESLLVGVTDEDRAVRSAHQFYERLIGLWAPAVMEAAHELGVFAALAEAPADSGELARRLDCDARAMRVLLDALYAYDVIDRIHDTNGFRYLLSAEARECLLPGTLFSLVGKFMHDINVAWPAWRNLAEVVRHGARDTSGAESPNGIAQEDYESLVGGINFWAPPIVTTLSRKLRASGRSGDATASVLDVGCGTGLYSQLLLREFPRWTATGLDVERIATLANAQALRLGVEERFATRAGDFWRGGWGTGYDLVLFANIFHLQTPASAVRLMRHAAACLAPDGLVAVVDQIVDADREPKTPQDRFALLFAASMTNTGGGDAYTFQEYEEWFTAAGLQRIETLDTPMHRILLARRATEPSAVPEGQASENLYFQ
+>E|smiles
+N[C@@H](Cc1ccc(O)cc1)C(=O)O
+```
+
+Submission script:
+```
+#!/bin/bash
+python3path=/home/janko/.conda/envs/boltz/bin
+export PATH=$python3path:$PATH
+
+cd <INP_DIR>
+
+/home/janko/.local/bin/boltz predict <INP_FILE>.fasta --use_msa_server --cache <PARAMETER_DIR>
 ```
 
 ### Submitting a Python Job
