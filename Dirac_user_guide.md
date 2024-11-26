@@ -210,7 +210,7 @@ colabfold_batch <INP_FILE>.fasta <OUTPUT_DIR>
 ```
 
 ### Submitting a Boltz-1 Job
-To predict the structure of a protein sequence with ligands on Dirac using [Boltz-1](https://github.com/jwohlwend/boltz), which is a model similar to AlphaFold3, you need a sequence file in `.fasta` or `.yml` format. More details on the structure of the input files can be found in the [documentation](https://github.com/jwohlwend/boltz/blob/main/docs/prediction.md). Submit the job script with `qsub` to queues d33 or d34. Boltz-1 downloads model parameters dynamically. In the submission script, specify a directory (`<PARAMETER_DIR>`) to store them. The parameters require approximately 7 GB of storage. The maximum size of the system you can model is limited by the GPU memory. 
+To predict the structure of a protein sequence with ligands on Dirac using [Boltz-1](https://github.com/jwohlwend/boltz), which is a model similar to AlphaFold3, you need a sequence file in `.fasta` or `.yaml` format. More details on the structure of the input files can be found in the [documentation](https://github.com/jwohlwend/boltz/blob/main/docs/prediction.md). Submit the job script with `qsub` to queues d33 or d34. Boltz-1 downloads model parameters dynamically. In the submission script, specify a directory (`<PARAMETER_DIR>`) to store them. The parameters require approximately 7 GB of storage. The maximum size of the system you can model is limited by the GPU memory. 
 
 Example input `.fasta` file:
 ```
